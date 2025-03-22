@@ -1,0 +1,22 @@
+stages:
+  - development
+
+before_script:
+  - apt-get update
+  - 'which ssh-agent || ( apt-get install -y openssh-server )'
+  - 'which sshpass || ( apt-get install -y sshpass)'
+  - eval $(ssh-agent -s)
+
+development:
+  stage: development
+  script:
+    - sshpass -p "${VAR_PASS_DEV}" ssh -o "StrictHostKeyChecking=no" ${VAR_USERNAME_DEV}@${VAR_IP_DEV} 'docker stop jago-pos_api && docker rm jago-pos_api'
+    - sshpass -p "${VAR_PASS_DEV}" ssh -o "StrictHostKeyChecking=no" ${VAR_USERNAME_DEV}@${VAR_IP_DEV} 'docker image rm jago-pos-api-app'
+    - sshpass -p "${VAR_PASS_DEV}" ssh -o "StrictHostKeyChecking=no" ${VAR_USERNAME_DEV}@${VAR_IP_DEV} 'cd /home/apps/development/jago-pos-api && git fetch --all && git reset --hard origin/dev && git pull origin dev'
+    - sshpass -p "${VAR_PASS_DEV}" ssh -o "StrictHostKeyChecking=no" ${VAR_USERNAME_DEV}@${VAR_IP_DEV} 'cd /home/apps/development/jago-pos-api && docker compose -f docker-compose.yml up -d --force-recreate'
+  after_script:
+    - echo "done"
+  tags:
+    - texio-gitlab-runner
+  only:
+    - dev

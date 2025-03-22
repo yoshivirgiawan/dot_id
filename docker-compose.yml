@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .  # Build context is the current directory
+    container_name: jago-pos_api
+    volumes:
+        # - ./:/app
+        - /home/apps/env/jagopos_api/.env:/app/.env
+    ports:
+      - "3000:3000" # Map container port 3000 to host port 3000
+    environment:
+      NODE_ENV: production # Set the environment to production
+    restart: unless-stopped # Automatically restart the container unless it is stopped manually
