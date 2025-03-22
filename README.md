@@ -139,7 +139,7 @@ src/
    - Kirim request ke `POST /auth/login` dengan body:
      ```json
      {
-       "email": "your_email"
+       "email": "Sincere@april.biz"
      }
      ```
    - Anda akan mendapatkan token JWT.
