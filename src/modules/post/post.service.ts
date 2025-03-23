@@ -72,11 +72,17 @@ export class PostService {
   }
 
   async getPostsByUserId(userId: number): Promise<PostEntity[]> {
-    return this.postRepository.find({ where: { userId } });
+    return this.postRepository.find({
+      where: { userId },
+      relations: ['comments'],
+    });
   }
 
   async getPostById(id: number): Promise<PostEntity> {
-    return this.postRepository.findOne({ where: { id } });
+    return this.postRepository.findOne({
+      where: { id },
+      relations: ['comments'],
+    });
   }
 
   async createPost(
